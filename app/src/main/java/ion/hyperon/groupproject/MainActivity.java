@@ -12,5 +12,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Little Bow Peep ran from the hordes.
+
+        // except the hordes chased him down and captured him.
     }
 }
