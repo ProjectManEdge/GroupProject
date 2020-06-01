@@ -13,6 +13,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Little Bow Peep ran from the hordes.
 
-        // except the hordes chased him down and captured him.
+        // except the hordes chased her down and captured her.
     }
 }
