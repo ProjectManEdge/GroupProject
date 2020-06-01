@@ -12,9 +12,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Little Bow Peep ran from the hordes.
-
-        // except the hordes chased her down and captured her.
-
-        //if only she had planted peas for Plants vs. Zombies
+        // Except the hordes chased her down and captured her.
+        // If only she had planted peas for Plants vs. Zombies,
+        // because that guy with a pot for a hat had been completely right.
     }
 }
