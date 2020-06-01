@@ -16,5 +16,7 @@ public class MainActivity extends AppCompatActivity {
         // except the hordes chased her down and captured her.
 
         //if only she had planted peas for Plants vs. Zombies
+
+        // Eat chocolate. It's good for you.
     }
 }
