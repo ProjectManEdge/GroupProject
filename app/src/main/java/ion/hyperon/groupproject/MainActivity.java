@@ -17,5 +17,7 @@ public class MainActivity extends AppCompatActivity {
         // because that guy with a pot for a hat had been completely right.
         // Eat chocolate. It's good for you.
         // An original comment.
+
+        // Disco Dancin'!
     }
 }
