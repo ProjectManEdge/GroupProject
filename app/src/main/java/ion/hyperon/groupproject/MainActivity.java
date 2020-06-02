@@ -16,6 +16,6 @@ public class MainActivity extends AppCompatActivity {
         // If only she had planted peas for Plants vs. Zombies,
         // because that guy with a pot for a hat had been completely right.
         // Eat chocolate. It's good for you.
-        //A random comment
+        // An original comment.
     }
 }
