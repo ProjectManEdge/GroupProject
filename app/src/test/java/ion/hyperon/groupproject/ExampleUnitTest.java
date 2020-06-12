@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+    public void testAssertStatement(){
+        try{
+            assertEquals(4, 2 + 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

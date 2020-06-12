@@ -23,6 +23,10 @@ android {
 
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -31,6 +35,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // This is to allow a Bar Chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 
     // Optional -- Robolectric environment
     testImplementation 'androidx.test:core:1.2.0'
