@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+//import com.google.gson.Gson;
+//import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
 
@@ -34,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(preferenceKey, Context.MODE_PRIVATE);
 
         // load in filter information
-       loadFilter();
+//       loadFilter();
 
     }
-
+/*
     public void loadFilter() {
 
         Gson gson = new Gson();
@@ -53,5 +53,5 @@ public class MainActivity extends AppCompatActivity {
         String json = gson.toJson(filters);
         editor.putString("filter",json);
         editor.apply();     // This line is IMPORTANT !!!
-    }
+    }*/
 }
