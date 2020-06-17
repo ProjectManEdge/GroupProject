@@ -3,8 +3,10 @@ package ion.hyperon.groupproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         GraphicCard fancy = new GraphicCard();
-        fancy.name = "Elite Card";
+        /*fancy.name = "Elite Card";
         fancy.price = 1000000; // ! million dollars!
-        catalog.add(fancy);
+        catalog.add(fancy);*/
 
     }
 
@@ -87,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
         String json = gson.toJson(filters);
         editor.putString("filter",json);
         editor.apply();     // This line is IMPORTANT !!!
+    }
+
+    public void BarChart(View view){
+        Intent getBarChart = new Intent(this,DisplayBarChartsActivity.class);
     }
 
     public void saveCatalog() {
