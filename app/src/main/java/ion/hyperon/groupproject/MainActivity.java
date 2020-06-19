@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void BarChart(View view){
-        Intent getBarChart = new Intent(this,DisplayBarChartsActivity.class);
+        Intent intent = new Intent(this,DisplayBarChartsActivity.class);
+        startActivity(intent);
     }
 
     public void saveCatalog() {
