@@ -13,7 +13,10 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
 
 // Little Bow Peep ran from the hordes.
 // Except the hordes chased her down and captured her.
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     static final String preferenceKey = "GraphicCardCatalog";
     SharedPreferences preferences;
     List<GraphicCard> catalog;
+    List<GraphicCard> filteredLog;
     HashMap<String, Object> filters;
 
     @Override
@@ -48,12 +52,44 @@ public class MainActivity extends AppCompatActivity {
         if (filterUsed == false)
             filters = new HashMap<String, Object>();
 
+        filteredLog = filterCatalog();
+
 
         GraphicCard fancy = new GraphicCard();
         /*fancy.name = "Elite Card";
         fancy.price = 1000000; // ! million dollars!
         catalog.add(fancy);*/
 
+    }
+
+    private List<GraphicCard> filterCatalog() {
+
+        List<GraphicCard> log = new ArrayList<GraphicCard>();
+
+        // loop through card catalog and and add cards to log that match filters.
+        Iterator<GraphicCard> it = catalog.iterator();
+        while (it.hasNext()) {
+            boolean withinFilter = true;
+
+            // HAS THIS filters
+
+            if (filters.containsKey("Name")) {
+                if (it.next().name.startsWith((String) Objects.requireNonNull(filters.get("Name"))))
+                    withinFilter = false;
+            }
+
+            if (withinFilter && filters.containsKey("")) {
+
+            }
+
+            // IS WITHIN filters
+
+            // Successfully filtered, add card to list and sort if needed
+            if (withinFilter)
+                log.add(it.next());
+        }
+
+        return log;
     }
 
     @Override
