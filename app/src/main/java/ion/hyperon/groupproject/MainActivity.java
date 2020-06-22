@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 
 // Little Bow Peep ran from the hordes.
@@ -154,5 +153,10 @@ public class MainActivity extends AppCompatActivity {
         catalog = gson.fromJson(json, type);
 
         return true;
+    }
+
+    // the point of no return
+    public void clearCatalog() {
+        catalog.clear();
     }
 }
