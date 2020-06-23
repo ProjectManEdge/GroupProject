@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">GroupProject</string>
+    <string name="app_name">Graphic Card Catalog</string>
+    <string name="filter">Filter</string>
+    <string name="clear">Clear All Data</string>
 </resources>
