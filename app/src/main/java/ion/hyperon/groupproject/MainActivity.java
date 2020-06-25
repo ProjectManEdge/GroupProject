@@ -1,6 +1,8 @@
 package ion.hyperon.groupproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,8 +35,13 @@ public class MainActivity extends AppCompatActivity {
 
     static final String preferenceKey = "GraphicCardCatalog";
     SharedPreferences preferences;
-    List<GraphicCard> catalog;
-    List<GraphicCard> filteredLog;
+
+    private RecyclerView mRecycleView;
+    private RecyclerView.Adapter mAdaptor;
+    private RecyclerView.LayoutManager mLayoutManage;
+
+    ArrayList<GraphicCard> catalog;
+    ArrayList<GraphicCard> filteredLog;
     HashMap<String, Object> filters;
 
     @Override
@@ -56,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
         filteredLog = filterCatalog();
 
+        //load up recyclerView
+        mRecycleView = findViewById(R.id.recyclerView);
+        mRecycleView.setHasFixedSize(true);
+
+        mLayoutManage = new LinearLayoutManager(this);
+        mRecycleView.setLayoutManager(mLayoutManage);
+
+        mAdaptor = new GraphicCardAdaptor(filteredLog);
+        mRecycleView.setAdapter(mAdaptor);
 
         GraphicCard fancy = new GraphicCard();
         /*fancy.name = "Elite Card";
@@ -84,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private List<GraphicCard> filterCatalog() {
+    private ArrayList<GraphicCard> filterCatalog() {
 
-        List<GraphicCard> log = new ArrayList<GraphicCard>();
+        ArrayList<GraphicCard> log = new ArrayList<GraphicCard>();
 
         // loop through card catalog and and add cards to log that match filters.
         Iterator<GraphicCard> it = catalog.iterator();
