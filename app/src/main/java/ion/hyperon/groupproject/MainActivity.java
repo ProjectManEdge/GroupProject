@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +20,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 // Little Bow Peep ran from the hordes.
@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<GraphicCard> filteredLog;
     HashMap<String, Object> filters;
 
+    Button buttonAddCard;
+    Button buttonRemoveCard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,30 +54,28 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(preferenceKey, Context.MODE_PRIVATE);
 
-        // load in catalog, create new if it doesn't exist
-        boolean catalogExists = loadCatalog();
-        if (catalogExists == false)
-            catalog = new ArrayList<GraphicCard>();
+        buttonAddCard = findViewById(R.id.buttonAdd);
+        buttonRemoveCard = findViewById(R.id.buttonRemove);
 
-        // load in filter information, create new if it doesn't exist
-        boolean filterUsed = loadFilter();
-        if (filterUsed == false)
-            filters = new HashMap<String, Object>();
+        buttonAddCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        filteredLog = filterCatalog();
+            }
+        });
 
-        //load up recyclerView
-        mRecycleView = findViewById(R.id.recyclerView);
-        mRecycleView.setHasFixedSize(true);
+        buttonRemoveCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
 
-        mLayoutManage = new LinearLayoutManager(this);
-        mRecycleView.setLayoutManager(mLayoutManage);
+        setupData();
+        setupDisplay();
 
-        mAdaptor = new GraphicCardAdaptor(filteredLog);
-        mRecycleView.setAdapter(mAdaptor);
-
-        GraphicCard fancy = new GraphicCard();
-        /*fancy.name = "Elite Card";
+        /*GraphicCard fancy = new GraphicCard();
+        fancy.name = "Elite Card";
         fancy.price = 1000000; // ! million dollars!
         catalog.add(fancy);*/
 
@@ -197,5 +198,31 @@ public class MainActivity extends AppCompatActivity {
     // the point of no return
     public void clearCatalog() {
         catalog.clear();
+    }
+
+    public void setupData() {
+        // load in catalog, create new if it doesn't exist
+        boolean catalogExists = loadCatalog();
+        if (catalogExists == false)
+            catalog = new ArrayList<GraphicCard>();
+
+        // load in filter information, create new if it doesn't exist
+        boolean filterUsed = loadFilter();
+        if (filterUsed == false)
+            filters = new HashMap<String, Object>();
+
+        filteredLog = filterCatalog();
+    }
+
+    public void setupDisplay() {
+        //load up recyclerView
+        mRecycleView = findViewById(R.id.recyclerView);
+        mRecycleView.setHasFixedSize(true);
+
+        mLayoutManage = new LinearLayoutManager(this);
+        mRecycleView.setLayoutManager(mLayoutManage);
+
+        mAdaptor = new GraphicCardAdaptor(filteredLog);
+        mRecycleView.setAdapter(mAdaptor);
     }
 }
