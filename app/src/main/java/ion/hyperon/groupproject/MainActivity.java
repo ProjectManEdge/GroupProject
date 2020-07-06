@@ -1,6 +1,7 @@
 package ion.hyperon.groupproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,17 +59,23 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(preferenceKey, Context.MODE_PRIVATE);
 
+        // setup materials
         setupData();
-        setupDisplay();
+        setupCatalogDisplay();
+        setupOtherDisplays();
 
-        addView =findViewById(R.id.addScrollView);
+        // make references to major view objects... possibly move to display setup functions.
+        mainView = findViewById(R.id.mainView);
+        addView = findViewById(R.id.cardEditor);
 
-        //addView.setVisibility(View.GONE);
+        // hide un-needed views
+        addView.setVisibility(View.GONE);
 
         /*GraphicCard fancy = new GraphicCard();
         fancy.name = "Elite Card";
         fancy.price = 1000000; // ! million dollars!
-        catalog.add(fancy);*/
+        catalog.add(fancy);
+        mAdaptor.notifyDataSetChanged();*/
 
     }
 
@@ -91,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // uses filter functions to adjust the filtered log and the data displayed.
     private ArrayList<GraphicCard> filterCatalog() {
 
         ArrayList<GraphicCard> log = new ArrayList<GraphicCard>();
@@ -204,7 +213,8 @@ public class MainActivity extends AppCompatActivity {
         filteredLog = filterCatalog();
     }
 
-    public void setupDisplay() {
+    // setup for the card list of graphic cards
+    public void setupCatalogDisplay() {
         //load up recyclerView
         mRecycleView = findViewById(R.id.recyclerView);
         mRecycleView.setHasFixedSize(true);
@@ -212,7 +222,35 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManage = new LinearLayoutManager(this);
         mRecycleView.setLayoutManager(mLayoutManage);
 
+        // setup adapter tool for use elsewhere
         mAdaptor = new GraphicCardAdaptor(filteredLog);
         mRecycleView.setAdapter(mAdaptor);
+    }
+
+    // creates and adds views from other XML files.
+    // NOTE: DO NOT USE onClick in these XML files! set up button actions in Main using setOnClickListener()
+    public void setupOtherDisplays() {
+        ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+
+        View cardEditorView = inflater.inflate(R.layout.card_editor, null);
+
+        mainLayout.addView(cardEditorView);
+
+    }
+
+    // opens up a view for adding a new graphic card to the catalog.
+    public void addCard(View view) {
+        addView.setVisibility(View.VISIBLE);
+        mainView.setVisibility(View.GONE);
+
+        Button addButton = (Button) findViewById(R.id.button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainView.setVisibility(View.VISIBLE);
+                addView.setVisibility(View.GONE);
+            }
+        });
     }
 }
