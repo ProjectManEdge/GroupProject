@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     static final String preferenceKey = "GraphicCardCatalog";
     SharedPreferences preferences;
 
+    private View mainView;
+    private View addView;
+
     private RecyclerView mRecycleView;
     private RecyclerView.Adapter mAdaptor;
     private RecyclerView.LayoutManager mLayoutManage;
@@ -54,25 +57,12 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(preferenceKey, Context.MODE_PRIVATE);
 
-        buttonAddCard = findViewById(R.id.buttonAdd);
-        buttonRemoveCard = findViewById(R.id.buttonRemove);
-
-        buttonAddCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        buttonRemoveCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-            }
-        });
-
         setupData();
         setupDisplay();
+
+        addView =findViewById(R.id.addScrollView);
+
+        //addView.setVisibility(View.GONE);
 
         /*GraphicCard fancy = new GraphicCard();
         fancy.name = "Elite Card";

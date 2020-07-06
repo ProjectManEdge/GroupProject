@@ -4,4 +4,8 @@
     <string name="clear">Clear All Data</string>
     <string name="addCard">Add</string>
     <string name="removeCard">Remove</string>
+    <string name="Card_Name">Name</string>
+    <string name="Card_Manufactor">Manufacturer</string>
+    <string name="Card_Price">Price</string>
+    <string name="Card_Ram">Ram</string>
 </resources>
