@@ -16,7 +16,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class DisplayBarChartsActivity extends AppCompatActivity {
+/*public class DisplayBarChartsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +26,14 @@ public class DisplayBarChartsActivity extends AppCompatActivity {
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(8f, 0));
-        entries.add(new BarEntry(2f, 1));
-        entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(20f, 3));
-        entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(19f, 5));
+        //for (int i = 0; i < entries<BarEntry>.length; i++){
+            entries.add(new BarEntry(8f, 0));
+            entries.add(new BarEntry(2f, 1));
+            entries.add(new BarEntry(5f, 2));
+            entries.add(new BarEntry(20f, 3));
+            entries.add(new BarEntry(15f, 4));
+            entries.add(new BarEntry(19f, 5));
+        //}
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
 
@@ -50,4 +52,4 @@ public class DisplayBarChartsActivity extends AppCompatActivity {
         barChart.animateY(5000);
 
     }
-}
+}*/
