@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -26,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Objects;
@@ -56,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<GraphicCard> filteredLog;
     HashMap<String, Object> filters;
 
-    Button buttonAddCard;
-    Button buttonRemoveCard;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +69,11 @@ public class MainActivity extends AppCompatActivity {
         setupData();
         setupCatalogDisplay();
         setupOtherDisplays();
-        setupBarChartDisplay();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
         addView = findViewById(R.id.cardEditor);
-        graphView = findViewById(R.id.barchart);
+        setupBarChartDisplay();
 
         // hide un-needed views
         addView.setVisibility(View.GONE);
@@ -104,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // uses filter functions to adjust the filtered log and the data displayed.
-    private ArrayList<GraphicCard> filterCatalog() {
-
-        ArrayList<GraphicCard> log = new ArrayList<GraphicCard>();
+    private void filterCatalog() {
 
         // loop through card catalog and and add cards to log that match filters.
         Iterator<GraphicCard> it = catalog.iterator();
@@ -128,15 +124,15 @@ public class MainActivity extends AppCompatActivity {
 
             // Successfully filtered, add card to list and sort if needed
             if (withinFilter)
-                log.add(it.next());
+                filteredLog.add(it.next());
         }
-
-        return log;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+        // save data
 
         if (!filters.isEmpty())
             saveFilter();
@@ -193,23 +189,26 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
     // the point of no return
     public void clearCatalog() {
         catalog.clear();
     }
+     */
 
     public void setupData() {
         // load in catalog, create new if it doesn't exist
         boolean catalogExists = loadCatalog();
-        if (catalogExists == false)
-            catalog = new ArrayList<GraphicCard>();
+        if (!catalogExists)
+            catalog = new ArrayList<>();
 
         // load in filter information, create new if it doesn't exist
         boolean filterUsed = loadFilter();
-        if (filterUsed == false)
-            filters = new HashMap<String, Object>();
+        if (!filterUsed)
+            filters = new HashMap<>();
 
-        filteredLog = filterCatalog();
+        filteredLog = new ArrayList<>();
+        filterCatalog();
     }
 
     // setup for the card list of graphic cards
@@ -284,15 +283,49 @@ public class MainActivity extends AppCompatActivity {
 
     // opens up a view for adding a new graphic card to the catalog.
     public void addCard(View view) {
+
+        // reveal addCard view
         addView.setVisibility(View.VISIBLE);
         mainView.setVisibility(View.GONE);
+
+        /*
+        EditText cardName = findViewById(R.id.newCardName);
+        EditText cardManufacter = findViewById(R.id.newManufacturor);
+        EditText cardPrice = findViewById(R.id.newPrice);
+        EditText cardRam = findViewById(R.id.newRam);
+        */
 
         Button addButton = (Button) findViewById(R.id.button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Create new card from data
+                GraphicCard newCard = new GraphicCard();
+                newCard.name = ((EditText)findViewById(R.id.newCardName)).getText().toString();
+                newCard.manufacturer = ((EditText)findViewById(R.id.newManufacturor)).getText().toString();
+                newCard.price = Float.parseFloat(((EditText)findViewById(R.id.newPrice)).getText().toString());
+                newCard.ram = Float.parseFloat(((EditText)findViewById(R.id.newRam)).getText().toString());
+
+                // Add card  to catalog and re-sort it
+                catalog.add(newCard);
+                catalog.sort(new Comparator<GraphicCard>() {
+                    @Override
+                    public int compare(GraphicCard o1, GraphicCard o2) {
+                        return o1.name.compareTo(o2.name);
+                    }
+                });
+
+                // Update Filtered data
+                filteredLog.clear();
+                filterCatalog();
+                mAdaptor.notifyDataSetChanged();
+
+                // return to Main View
                 mainView.setVisibility(View.VISIBLE);
                 addView.setVisibility(View.GONE);
+
+
             }
         });
     }
