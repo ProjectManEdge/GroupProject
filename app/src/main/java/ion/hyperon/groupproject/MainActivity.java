@@ -16,6 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private View mainView;
     private View addView;
+    private View graphView;
 
     private RecyclerView mRecycleView;
     private RecyclerView.Adapter mAdaptor;
@@ -63,19 +70,16 @@ public class MainActivity extends AppCompatActivity {
         setupData();
         setupCatalogDisplay();
         setupOtherDisplays();
+        setupBarChartDisplay();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
         addView = findViewById(R.id.cardEditor);
+        graphView = findViewById(R.id.barchart);
 
         // hide un-needed views
         addView.setVisibility(View.GONE);
-
-        /*GraphicCard fancy = new GraphicCard();
-        fancy.name = "Elite Card";
-        fancy.price = 1000000; // ! million dollars!
-        catalog.add(fancy);
-        mAdaptor.notifyDataSetChanged();*/
+        graphView.setVisibility(View.GONE);
 
     }
 
@@ -165,11 +169,6 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();     // This line is IMPORTANT !!!
     }
 
-    public void BarChart(View view){
-        Intent intent = new Intent(this,DisplayBarChartsActivity.class);
-        startActivity(intent);
-    }
-
     public void saveCatalog() {
 
         SharedPreferences.Editor editor = preferences.edit();
@@ -237,6 +236,50 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout.addView(cardEditorView);
 
+    }
+
+    public void setupBarChartDisplay() {
+        ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+
+        View barChartView = inflater.inflate(R.layout.activity_display_bar_charts, null);
+
+        mainLayout.addView(barChartView);
+    }
+
+    public void displayBarChart() {
+        //setContentView(R.layout.activity_display_bar_charts);
+
+        graphView.setVisibility(View.VISIBLE);
+        mainView.setVisibility(View.GONE);
+
+        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        //for (int i = 0; i < entries<BarEntry>.length; i++){
+        entries.add(new BarEntry(8f, 0));
+        entries.add(new BarEntry(2f, 1));
+        entries.add(new BarEntry(5f, 2));
+        entries.add(new BarEntry(20f, 3));
+        entries.add(new BarEntry(15f, 4));
+        entries.add(new BarEntry(19f, 5));
+        //}
+
+        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("2016");
+        labels.add("2015");
+        labels.add("2014");
+        labels.add("2013");
+        labels.add("2012");
+        labels.add("2011");
+
+        BarData data = new BarData(labels, bardataset);
+        barChart.setData(data); // set the data and list of labels into chart
+        barChart.setDescription("Set Bar Chart Description Here");  // set the description
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        barChart.animateY(5000);
     }
 
     // opens up a view for adding a new graphic card to the catalog.
