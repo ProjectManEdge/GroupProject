@@ -16,6 +16,17 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
 
     private ArrayList<GraphicCard> catalog;
 
+    // interface for clicking through parent activity
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
     //holder class for individual items in the catalog list.
     public static class GraphicCardViewHolder extends RecyclerView.ViewHolder {
 
@@ -23,12 +34,25 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
         public TextView textManufacturer;
         public CheckBox select;
 
-        public GraphicCardViewHolder(@NonNull View itemView) {
+        public GraphicCardViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             textName = itemView.findViewById(R.id.textView);
             textManufacturer = itemView.findViewById(R.id.textView2);
             select = itemView.findViewById(R.id.checkBox);
+
+            // setup onClickListener for parent Activity
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -42,9 +66,8 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
     @Override
     public GraphicCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.catalog_item, parent, false);
-        GraphicCardViewHolder gvh = new GraphicCardViewHolder(v);
 
-        return gvh;
+        return new GraphicCardViewHolder(v, mListener);
     }
 
     // Make a new "view item"
