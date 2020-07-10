@@ -76,11 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
-        //addView = findViewById(R.id.cardEditor);
         graphView = findViewById(R.id.barchart);
 
         // hide un-needed views
-        //addView.setVisibility(View.GONE);
         graphView.setVisibility(View.GONE);
 
     }
@@ -231,16 +229,6 @@ public class MainActivity extends AppCompatActivity {
 
     // creates and adds views from other XML files.
     // NOTE: DO NOT USE onClick in these XML files! set up button actions in Main using setOnClickListener()
-    public void setupOtherDisplays() {
-        ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-
-        View cardEditorView = inflater.inflate(R.layout.card_editor, null);
-
-        mainLayout.addView(cardEditorView);
-
-    }
-
     public void setupBarChartDisplay() {
         ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
@@ -297,13 +285,6 @@ public class MainActivity extends AppCompatActivity {
         // Hide Main View until the end of adding a card.
         mainView.setVisibility(View.GONE);
 
-        /*
-        EditText cardName = findViewById(R.id.newCardName);
-        EditText cardManufacter = findViewById(R.id.newManufacturor);
-        EditText cardPrice = findViewById(R.id.newPrice);
-        EditText cardRam = findViewById(R.id.newRam);
-        */
-
         Button addButton = findViewById(R.id.button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,8 +310,23 @@ public class MainActivity extends AppCompatActivity {
 
                 // return to Main View
                 mainView.setVisibility(View.VISIBLE);
-                //addView.setVisibility(View.GONE);
 
+                // end Add View
+                ((ViewGroup) addView.getParent()).removeView(addView);
+                hideKeyboard(MainActivity.this);
+
+            }
+        });
+
+        Button cancelButton = findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+
+                // end Add View
                 ((ViewGroup) addView.getParent()).removeView(addView);
                 hideKeyboard(MainActivity.this);
 
