@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -68,15 +71,16 @@ public class MainActivity extends AppCompatActivity {
         // setup materials
         setupData();
         setupCatalogDisplay();
-        setupOtherDisplays();
+        setupBarChartDisplay();
+        //setupOtherDisplays();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
-        addView = findViewById(R.id.cardEditor);
-        setupBarChartDisplay();
+        //addView = findViewById(R.id.cardEditor);
+        graphView = findViewById(R.id.barchart);
 
         // hide un-needed views
-        addView.setVisibility(View.GONE);
+        //addView.setVisibility(View.GONE);
         graphView.setVisibility(View.GONE);
 
     }
@@ -284,8 +288,13 @@ public class MainActivity extends AppCompatActivity {
     // opens up a view for adding a new graphic card to the catalog.
     public void addCard(View view) {
 
-        // reveal addCard view
-        addView.setVisibility(View.VISIBLE);
+        // create addView
+        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        inflater.inflate(R.layout.card_editor, mainLayout);
+        addView = findViewById(R.id.cardEditor);
+
+        // Hide Main View until the end of adding a card.
         mainView.setVisibility(View.GONE);
 
         /*
@@ -295,17 +304,14 @@ public class MainActivity extends AppCompatActivity {
         EditText cardRam = findViewById(R.id.newRam);
         */
 
-        Button addButton = (Button) findViewById(R.id.button);
+        Button addButton = findViewById(R.id.button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // Create new card from data
                 GraphicCard newCard = new GraphicCard();
-                newCard.name = ((EditText)findViewById(R.id.newCardName)).getText().toString();
-                newCard.manufacturer = ((EditText)findViewById(R.id.newManufacturor)).getText().toString();
-                newCard.price = Float.parseFloat(((EditText)findViewById(R.id.newPrice)).getText().toString());
-                newCard.ram = Float.parseFloat(((EditText)findViewById(R.id.newRam)).getText().toString());
+                fillCard(newCard);
 
                 // Add card  to catalog and re-sort it
                 catalog.add(newCard);
@@ -323,10 +329,40 @@ public class MainActivity extends AppCompatActivity {
 
                 // return to Main View
                 mainView.setVisibility(View.VISIBLE);
-                addView.setVisibility(View.GONE);
+                //addView.setVisibility(View.GONE);
 
+                ((ViewGroup) addView.getParent()).removeView(addView);
+                hideKeyboard(MainActivity.this);
 
             }
         });
+    }
+
+    private void fillCard(GraphicCard newCard) {
+
+        String temp;
+
+        temp = ((EditText) findViewById(R.id.newCardName)).getText().toString();
+        if (!temp.isEmpty()) newCard.name = temp;
+
+        temp = ((EditText) findViewById(R.id.newManufacturor)).getText().toString();
+        if (!temp.isEmpty()) newCard.manufacturer = temp;
+
+        temp = ((EditText) findViewById(R.id.newPrice)).getText().toString();
+        if (!temp.isEmpty()) newCard.price = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newRam)).getText().toString();
+        if (!temp.isEmpty()) newCard.ram = Float.parseFloat(temp);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
