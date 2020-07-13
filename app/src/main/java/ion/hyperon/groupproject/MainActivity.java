@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
         if (!temp.isEmpty()) newCard.price = Float.parseFloat(temp);
 
         temp = ((EditText) findViewById(R.id.newRam)).getText().toString();
-        if (!temp.isEmpty()) newCard.ram = Float.parseFloat(temp);
+        if (!temp.isEmpty()) newCard.ram_size = Float.parseFloat(temp);
     }
 
     public void editCard(GraphicCard card) {

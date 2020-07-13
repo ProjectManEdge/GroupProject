@@ -6,7 +6,8 @@ public class GraphicCard {
     public String manufacturer;
 
     public float price;
-    public float ram;
+    public float ram_size;
+    public String ram_type;
     public float PCI;
 
     public int fans;
@@ -37,7 +38,8 @@ public class GraphicCard {
         manufacturer = "Unknown";
 
         price = 0.00f;
-        ram = 0.f;
+        ram_size = 0.f;
+        ram_type = "";
         PCI = 0.f;
 
         fans = 0;

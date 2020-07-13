@@ -7,5 +7,10 @@
     <string name="Card_Name">Name</string>
     <string name="Card_Manufactor">Manufacturer</string>
     <string name="Card_Price">Price</string>
-    <string name="Card_Ram">Ram</string>
+    <string name="Card_Ram">Ram Size</string>
+
+    <string name="Score">Score</string>
+    <string name="avgFPS">Average FPS</string>
+    <string name="maxFPS">Max FPS</string>
+    <string name="minFPS">Min FPS</string>
 </resources>
