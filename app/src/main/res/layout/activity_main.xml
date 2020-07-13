@@ -32,44 +32,47 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"><![CDATA[
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-            <Button
-                android:id="@+id/buttonAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:onClick="addCard"
-                android:text="@string/addCard"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonGraph"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        ]]>
 
-            <Button
-                android:id="@+id/buttonRemove"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/removeCard"
-                app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/buttonGraph" />
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/ic_action_name_add_1"
+            android:onClick="addCard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonGraph"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-            <Button
-                android:id="@+id/buttonGraph"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Graph"
-                app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
-                app:layout_constraintEnd_toStartOf="@+id/buttonRemove"
-                app:layout_constraintStart_toEndOf="@+id/buttonAdd" />
+        <Button
+            android:id="@+id/buttonRemove"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_action_name_delete_1"
+            app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonGraph" />
+
+        <Button
+            android:id="@+id/buttonGraph"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@drawable/ic_action_name_graph_1"
+            app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
+            app:layout_constraintEnd_toStartOf="@+id/buttonRemove"
+            app:layout_constraintStart_toEndOf="@+id/buttonAdd" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
