@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
 
     private View mainView;
-    private View graphView;
 
     private RecyclerView mRecycleView;
     private GraphicCardAdaptor mAdaptor;
@@ -72,15 +71,9 @@ public class MainActivity extends AppCompatActivity {
         // setup materials
         setupData();
         setupCatalogDisplay();
-        setupBarChartDisplay();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
-        graphView = findViewById(R.id.barchart);
-
-        // hide un-needed views
-        graphView.setVisibility(View.GONE);
-
     }
 
 
@@ -252,7 +245,8 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         inflater.inflate(R.layout.activity_display_bar_charts, mainLayout);
-        graphView = findViewById(R.id.barChartLayout);
+
+        View graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
         //create the barchart
