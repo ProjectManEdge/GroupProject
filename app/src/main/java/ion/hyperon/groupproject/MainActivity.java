@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +30,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -51,11 +53,9 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
 
     private View mainView;
-    private View addView;
-    private View graphView;
 
     private RecyclerView mRecycleView;
-    private RecyclerView.Adapter mAdaptor;
+    private GraphicCardAdaptor mAdaptor;
     private RecyclerView.LayoutManager mLayoutManage;
 
     ArrayList<GraphicCard> catalog;
@@ -72,18 +72,9 @@ public class MainActivity extends AppCompatActivity {
         // setup materials
         setupData();
         setupCatalogDisplay();
-        //setupBarChartDisplay();
-        //setupOtherDisplays();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
-        //addView = findViewById(R.id.cardEditor);
-        //graphView = findViewById(R.id.barchart);
-
-        // hide un-needed views
-        //addView.setVisibility(View.GONE);
-        //graphView.setVisibility(View.GONE);
-
     }
 
 
@@ -228,20 +219,18 @@ public class MainActivity extends AppCompatActivity {
         // setup adapter tool for use elsewhere
         mAdaptor = new GraphicCardAdaptor(filteredLog);
         mRecycleView.setAdapter(mAdaptor);
+
+        // setup onClickListener for each item
+        mAdaptor.setOnItemClickListener(new GraphicCardAdaptor.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                editCard(filteredLog.get(position));
+            }
+        });
     }
 
     // creates and adds views from other XML files.
     // NOTE: DO NOT USE onClick in these XML files! set up button actions in Main using setOnClickListener()
-    public void setupOtherDisplays() {
-        ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-
-        View cardEditorView = inflater.inflate(R.layout.card_editor, null);
-
-        mainLayout.addView(cardEditorView);
-
-    }
-
     public void setupBarChartDisplay() {
         ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
@@ -257,7 +246,8 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         inflater.inflate(R.layout.activity_display_bar_charts, mainLayout);
-        graphView = findViewById(R.id.barChartLayout);
+
+        View graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
         graphicCardPrice();
@@ -332,8 +322,6 @@ public class MainActivity extends AppCompatActivity {
     public void graphicCardRam(){
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
-        List<String> GraphicCard1 = new ArrayList<>();
-
         //fill the barchart information
         ArrayList<BarEntry> entries = new ArrayList<>();
         //for (int i = 0; i < entries<BarEntry>.length; i++){
@@ -365,22 +353,17 @@ public class MainActivity extends AppCompatActivity {
     // opens up a view for adding a new graphic card to the catalog.
     public void addCard(View view) {
 
+        View addView;
+
         // create addView
         final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         inflater.inflate(R.layout.card_editor, mainLayout);
-        addView = findViewById(R.id.cardEditor);
 
         // Hide Main View until the end of adding a card.
         mainView.setVisibility(View.GONE);
 
-        /*
-        EditText cardName = findViewById(R.id.newCardName);
-        EditText cardManufacter = findViewById(R.id.newManufacturor);
-        EditText cardPrice = findViewById(R.id.newPrice);
-        EditText cardRam = findViewById(R.id.newRam);
-        */
-
+        // build the new card from input and return to main view
         Button addButton = findViewById(R.id.button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,13 +387,29 @@ public class MainActivity extends AppCompatActivity {
                 filterCatalog();
                 mAdaptor.notifyDataSetChanged();
 
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-                //addView.setVisibility(View.GONE);
-
-                ((ViewGroup) addView.getParent()).removeView(addView);
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
                 hideKeyboard(MainActivity.this);
 
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Cancel adding a graphic card and close the view
+        Button cancelButton = findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -430,6 +429,113 @@ public class MainActivity extends AppCompatActivity {
 
         temp = ((EditText) findViewById(R.id.newRam)).getText().toString();
         if (!temp.isEmpty()) newCard.ram_size = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newRamType)).getText().toString();
+        if (!temp.isEmpty()) newCard.ram_type = temp;
+
+        temp = ((EditText) findViewById(R.id.newPCI)).getText().toString();
+        if (!temp.isEmpty()) newCard.PCI = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newFans)).getText().toString();
+        if (!temp.isEmpty()) newCard.fans = Integer.parseInt(temp);
+
+        temp = ((EditText) findViewById(R.id.newHDMI)).getText().toString();
+        if (!temp.isEmpty()) newCard.hdmi = Integer.parseInt(temp);
+
+        temp = ((EditText) findViewById(R.id.newDisplays)).getText().toString();
+        if (!temp.isEmpty()) newCard.displayPorts = Integer.parseInt(temp);
+
+        temp = ((EditText) findViewById(R.id.newPCI_Lane)).getText().toString();
+        if (!temp.isEmpty()) newCard.PCI_Lane = Integer.parseInt(temp);
+
+        // Heaven Score
+        temp = ((EditText) findViewById(R.id.newHeavenScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newHeavenAvgFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenAvgFps = Float.parseFloat(temp);
+    }
+
+    public void editCard(GraphicCard card) {
+        // create editView
+        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        inflater.inflate(R.layout.card_editor, mainLayout);
+        View editview = findViewById(R.id.cardEditor);
+
+        final WeakReference<GraphicCard> reference = new WeakReference<GraphicCard>(card);
+
+        fillEditor(editview, card);
+        ((Button) findViewById(R.id.button)).setText("Save Changes");
+
+        // Hide Main View until the end of editing a card.
+        mainView.setVisibility(View.GONE);
+
+        Button editButton = findViewById(R.id.button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // save Changes
+                fillCard(reference.get());
+
+                // Add card  to catalog and re-sort it
+                catalog.sort(new Comparator<GraphicCard>() {
+                    @Override
+                    public int compare(GraphicCard o1, GraphicCard o2) {
+                        return o1.name.compareTo(o2.name);
+                    }
+                });
+
+                // Update Filtered data
+                filteredLog.clear();
+                filterCatalog();
+                mAdaptor.notifyDataSetChanged();
+
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Cancel adding a graphic card and close the view
+        Button cancelButton = findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+            }
+        });
+    }
+
+    private void fillEditor(View view, GraphicCard card) {
+
+        ((EditText) findViewById(R.id.newCardName)).setText(card.name);
+        ((EditText) findViewById(R.id.newManufacturor)).setText(card.manufacturer);
+        ((EditText) findViewById(R.id.newPrice)).setText(Float.toString(card.price));
+        ((EditText) findViewById(R.id.newRam)).setText(Float.toString(card.ram_size));
+        ((EditText) findViewById(R.id.newRamType)).setText(card.ram_type);
+        ((EditText) findViewById(R.id.newPCI)).setText(Float.toString(card.PCI));
+        ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newHDMI)).setText(Integer.toString(card.hdmi));
+        ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newPCI_Lane)).setText(Integer.toString(card.PCI_Lane));
+
+        // Heaven Score
+        ((EditText) findViewById(R.id.newHeavenScore)).setText(Double.toString(card.heavenScore));
+        ((EditText) findViewById(R.id.newHeavenAvgFPS)).setText(Float.toString(card.heavenAvgFps));
     }
 
     public static void hideKeyboard(Activity activity) {
