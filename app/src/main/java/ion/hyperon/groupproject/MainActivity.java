@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -244,22 +246,27 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(barChartView);
     }
 
-    public void displayBarChart() {
+    public void displayBarChart(View view) {
         //setContentView(R.layout.activity_display_bar_charts);
-
-        graphView.setVisibility(View.VISIBLE);
+        //create the layout for displaying the barcharts
+        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        inflater.inflate(R.layout.activity_display_bar_charts, mainLayout);
+        graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
+        //create the barchart
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
+        //fill the barchart information
         ArrayList<BarEntry> entries = new ArrayList<>();
         //for (int i = 0; i < entries<BarEntry>.length; i++){
         entries.add(new BarEntry(8f, 0));
         entries.add(new BarEntry(2f, 1));
         entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(20f, 3));
+        entries.add(new BarEntry(12f, 3));
         entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(19f, 5));
+        entries.add(new BarEntry(11f, 5));
         //}
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
@@ -277,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.setDescription("Set Bar Chart Description Here");  // set the description
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
+
     }
 
     // opens up a view for adding a new graphic card to the catalog.
