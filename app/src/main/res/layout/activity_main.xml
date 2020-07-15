@@ -62,14 +62,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/buttonGraph" />
 
-            <Button
-                android:id="@+id/buttonGraph"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Graph"
-                app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
-                app:layout_constraintEnd_toStartOf="@+id/buttonRemove"
-                app:layout_constraintStart_toEndOf="@+id/buttonAdd" />
+        <Button
+            android:id="@+id/buttonGraph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="displayBarChart"
+            android:text="Graph"
+            app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
+            app:layout_constraintEnd_toStartOf="@+id/buttonRemove"
+            app:layout_constraintStart_toEndOf="@+id/buttonAdd" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -48,10 +50,11 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
 
     private View mainView;
+    private View addView;
     private View graphView;
 
     private RecyclerView mRecycleView;
-    private GraphicCardAdaptor mAdaptor;
+    private RecyclerView.Adapter mAdaptor;
     private RecyclerView.LayoutManager mLayoutManage;
 
     ArrayList<GraphicCard> catalog;
@@ -68,14 +71,17 @@ public class MainActivity extends AppCompatActivity {
         // setup materials
         setupData();
         setupCatalogDisplay();
-        setupBarChartDisplay();
+        //setupBarChartDisplay();
+        //setupOtherDisplays();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
-        graphView = findViewById(R.id.barchart);
+        //addView = findViewById(R.id.cardEditor);
+        //graphView = findViewById(R.id.barchart);
 
         // hide un-needed views
-        graphView.setVisibility(View.GONE);
+        //addView.setVisibility(View.GONE);
+        //graphView.setVisibility(View.GONE);
 
     }
 
@@ -221,18 +227,20 @@ public class MainActivity extends AppCompatActivity {
         // setup adapter tool for use elsewhere
         mAdaptor = new GraphicCardAdaptor(filteredLog);
         mRecycleView.setAdapter(mAdaptor);
-
-        // setup onClickListener for each item
-        mAdaptor.setOnItemClickListener(new GraphicCardAdaptor.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                editCard(filteredLog.get(position));
-            }
-        });
     }
 
     // creates and adds views from other XML files.
     // NOTE: DO NOT USE onClick in these XML files! set up button actions in Main using setOnClickListener()
+    public void setupOtherDisplays() {
+        ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+
+        View cardEditorView = inflater.inflate(R.layout.card_editor, null);
+
+        mainLayout.addView(cardEditorView);
+
+    }
+
     public void setupBarChartDisplay() {
         ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
@@ -242,22 +250,27 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(barChartView);
     }
 
-    public void displayBarChart() {
+    public void displayBarChart(View view) {
         //setContentView(R.layout.activity_display_bar_charts);
-
-        graphView.setVisibility(View.VISIBLE);
+        //create the layout for displaying the barcharts
+        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        inflater.inflate(R.layout.activity_display_bar_charts, mainLayout);
+        graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
+        //create the barchart
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
+        //fill the barchart information
         ArrayList<BarEntry> entries = new ArrayList<>();
         //for (int i = 0; i < entries<BarEntry>.length; i++){
         entries.add(new BarEntry(8f, 0));
         entries.add(new BarEntry(2f, 1));
         entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(20f, 3));
+        entries.add(new BarEntry(12f, 3));
         entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(19f, 5));
+        entries.add(new BarEntry(11f, 5));
         //}
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
@@ -275,22 +288,28 @@ public class MainActivity extends AppCompatActivity {
         barChart.setDescription("Set Bar Chart Description Here");  // set the description
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
+
     }
 
     // opens up a view for adding a new graphic card to the catalog.
     public void addCard(View view) {
 
-        View addView;
-
         // create addView
         final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         inflater.inflate(R.layout.card_editor, mainLayout);
+        addView = findViewById(R.id.cardEditor);
 
         // Hide Main View until the end of adding a card.
         mainView.setVisibility(View.GONE);
 
-        // build the new card from input and return to main view
+        /*
+        EditText cardName = findViewById(R.id.newCardName);
+        EditText cardManufacter = findViewById(R.id.newManufacturor);
+        EditText cardPrice = findViewById(R.id.newPrice);
+        EditText cardRam = findViewById(R.id.newRam);
+        */
+
         Button addButton = findViewById(R.id.button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,30 +335,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // return to Main View
                 mainView.setVisibility(View.VISIBLE);
+                //addView.setVisibility(View.GONE);
 
-                // end Add View
-                View view = findViewById(R.id.cardEditor);
-                ((ViewGroup) view.getParent()).removeView(view);
-                hideKeyboard(MainActivity.this);
-
-                // Hide Main View until the end of adding a card.
-                mainView.setVisibility(View.GONE);
-
-            }
-        });
-
-        // Cancel adding a graphic card and close the view
-        Button cancelButton = findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-
-                // end Add View
-                View view = findViewById(R.id.cardEditor);
-                ((ViewGroup) view.getParent()).removeView(view);
+                ((ViewGroup) addView.getParent()).removeView(addView);
                 hideKeyboard(MainActivity.this);
 
             }
@@ -360,34 +358,7 @@ public class MainActivity extends AppCompatActivity {
         if (!temp.isEmpty()) newCard.price = Float.parseFloat(temp);
 
         temp = ((EditText) findViewById(R.id.newRam)).getText().toString();
-        if (!temp.isEmpty()) newCard.ram_size = Float.parseFloat(temp);
-    }
-
-    public void editCard(GraphicCard card) {
-        // create editView
-        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-        inflater.inflate(R.layout.card_editor, mainLayout);
-
-        // Hide Main View until the end of editing a card.
-        mainView.setVisibility(View.GONE);
-
-        // Cancel adding a graphic card and close the view
-        Button cancelButton = findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-
-                // end Add View
-                View view = findViewById(R.id.cardEditor);
-                ((ViewGroup) view.getParent()).removeView(view);
-                hideKeyboard(MainActivity.this);
-
-            }
-        });
+        if (!temp.isEmpty()) newCard.ram = Float.parseFloat(temp);
     }
 
     public static void hideKeyboard(Activity activity) {
