@@ -226,6 +226,11 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(int position) {
                 editCard((filteredLog.get(position)).get());
             }
+
+            @Override
+            public void onDeleteClick(int postion) {
+                deleteCard(postion);
+            }
         });
     }
 
@@ -479,6 +484,12 @@ public class MainActivity extends AppCompatActivity {
     public void removeCard(View view) {
         mAdaptor.deleteMode = !mAdaptor.deleteMode;
         mAdaptor.notifyDataSetChanged();
+    }
+
+    public void deleteCard(int position) {
+        catalog.remove(filteredLog.get(position).get());
+        filteredLog.remove(position);
+        mAdaptor.notifyItemRemoved(position);
     }
 
     private void fillEditor(View view, GraphicCard card) {
