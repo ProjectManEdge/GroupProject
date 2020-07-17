@@ -4,7 +4,6 @@ import android.icu.text.DecimalFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +40,7 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
         public TextView textManufacturer;
         public TextView price;
         public ImageView deleteImage;
+        public TextView ramAmount;
 
 
         public GraphicCardViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
@@ -50,6 +50,7 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
             textManufacturer = itemView.findViewById(R.id.textView2);
             price = itemView.findViewById(R.id.catalog_card_Price);
             deleteImage = itemView.findViewById(R.id.Card_Delete);
+            ramAmount = itemView.findViewById(R.id.Catalog_Card_Ram);
 
             // setup onClickListener for parent Activity
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +103,7 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
         holder.textName.setText(currentCard.name);
         holder.textManufacturer.setText(currentCard.manufacturer);
         holder.price.setText("$" + formatter.format(currentCard.price));
+        holder.ramAmount.setText(Float.toString(currentCard.ram_size) + "GB");
 
         if (deleteMode) {
             holder.deleteImage.setVisibility(View.VISIBLE);

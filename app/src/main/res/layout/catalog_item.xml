@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:contentPadding="1dp"
-    app:contentPaddingBottom="1dp">
+    app:cardCornerRadius="4dp"
+    app:cardElevation="1dp"
+    app:cardMaxElevation="1dp"
+    app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/border">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView"
@@ -19,6 +20,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:text="Graphic Card 1"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,10 +38,12 @@
 
         <TextView
             android:id="@+id/catalog_card_Price"
-            android:layout_width="wrap_content"
+            android:layout_width="112dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/Card_Price"
+            android:textSize="15sp"
+            android:textColor="@android:color/holo_green_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,8 +62,10 @@
             android:id="@+id/Catalog_Card_Ram"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="16dp"
             android:text="@string/Card_Ram"
+            android:textSize="15sp"
+            android:textColor="@android:color/holo_blue_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/catalog_card_Price"
             app:layout_constraintTop_toTopOf="parent" />
