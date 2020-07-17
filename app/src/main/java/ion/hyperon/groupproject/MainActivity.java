@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 // Little Bow Peep ran from the hordes.
@@ -249,7 +250,76 @@ public class MainActivity extends AppCompatActivity {
         View graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
-        //create the barchart
+        graphicCardPrice();
+    }
+
+    public void graphicCardHeaven(){
+        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+
+        List<String> GraphicCard1 = new ArrayList<>();
+
+        //fill the barchart information
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        //for (int i = 0; i < entries<BarEntry>.length; i++){
+        entries.add(new BarEntry(8f, 0));
+        entries.add(new BarEntry(2f, 1));
+        entries.add(new BarEntry(5f, 2));
+        entries.add(new BarEntry(12f, 3));
+        entries.add(new BarEntry(15f, 4));
+        entries.add(new BarEntry(11f, 5));
+        //}
+
+        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("2016");
+        labels.add("2015");
+        labels.add("2014");
+        labels.add("2013");
+        labels.add("2012");
+        labels.add("2011");
+
+        BarData data = new BarData(labels, bardataset);
+        barChart.setData(data); // set the data and list of labels into chart
+        barChart.setDescription("Graphics Cards Heaven");  // set the description
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        barChart.animateY(5000);
+    }
+
+    public void graphicCardPrice(){
+        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+
+        List<String> GraphicCard1 = new ArrayList<>();
+
+        //fill the barchart information
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        //for (int i = 0; i < entries<BarEntry>.length; i++){
+        entries.add(new BarEntry(8f, 0));
+        entries.add(new BarEntry(2f, 1));
+        entries.add(new BarEntry(5f, 2));
+        entries.add(new BarEntry(12f, 3));
+        entries.add(new BarEntry(15f, 4));
+        entries.add(new BarEntry(11f, 5));
+        //}
+
+        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("2016");
+        labels.add("2015");
+        labels.add("2014");
+        labels.add("2013");
+        labels.add("2012");
+        labels.add("2011");
+
+        BarData data = new BarData(labels, bardataset);
+        barChart.setData(data); // set the data and list of labels into chart
+        barChart.setDescription("Graphics Cards Price");  // set the description
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        barChart.animateY(5000);
+    }
+
+    public void graphicCardRam(){
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
         //fill the barchart information
@@ -275,10 +345,9 @@ public class MainActivity extends AppCompatActivity {
 
         BarData data = new BarData(labels, bardataset);
         barChart.setData(data); // set the data and list of labels into chart
-        barChart.setDescription("Set Bar Chart Description Here");  // set the description
+        barChart.setDescription("Graphics Cards RAM");  // set the description
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
-
     }
 
     // opens up a view for adding a new graphic card to the catalog.
