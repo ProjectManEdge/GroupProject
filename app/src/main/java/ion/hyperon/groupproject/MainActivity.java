@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -27,10 +30,12 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 // Little Bow Peep ran from the hordes.
@@ -48,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
 
     private View mainView;
-    private View graphView;
 
     private RecyclerView mRecycleView;
     private GraphicCardAdaptor mAdaptor;
@@ -68,15 +72,9 @@ public class MainActivity extends AppCompatActivity {
         // setup materials
         setupData();
         setupCatalogDisplay();
-        setupBarChartDisplay();
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
-        graphView = findViewById(R.id.barchart);
-
-        // hide un-needed views
-        graphView.setVisibility(View.GONE);
-
     }
 
 
@@ -242,22 +240,33 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(barChartView);
     }
 
-    public void displayBarChart() {
+    public void displayBarChart(View view) {
         //setContentView(R.layout.activity_display_bar_charts);
+        //create the layout for displaying the barcharts
+        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        inflater.inflate(R.layout.activity_display_bar_charts, mainLayout);
 
-        graphView.setVisibility(View.VISIBLE);
+        View graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
+        graphicCardPrice();
+    }
+
+    public void graphicCardHeaven(){
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
+        List<String> GraphicCard1 = new ArrayList<>();
+
+        //fill the barchart information
         ArrayList<BarEntry> entries = new ArrayList<>();
         //for (int i = 0; i < entries<BarEntry>.length; i++){
         entries.add(new BarEntry(8f, 0));
         entries.add(new BarEntry(2f, 1));
         entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(20f, 3));
+        entries.add(new BarEntry(12f, 3));
         entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(19f, 5));
+        entries.add(new BarEntry(11f, 5));
         //}
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
@@ -272,7 +281,71 @@ public class MainActivity extends AppCompatActivity {
 
         BarData data = new BarData(labels, bardataset);
         barChart.setData(data); // set the data and list of labels into chart
-        barChart.setDescription("Set Bar Chart Description Here");  // set the description
+        barChart.setDescription("Graphics Cards Heaven");  // set the description
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        barChart.animateY(5000);
+    }
+
+    public void graphicCardPrice(){
+        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+
+        List<String> GraphicCard1 = new ArrayList<>();
+
+        //fill the barchart information
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        //for (int i = 0; i < entries<BarEntry>.length; i++){
+        entries.add(new BarEntry(8f, 0));
+        entries.add(new BarEntry(2f, 1));
+        entries.add(new BarEntry(5f, 2));
+        entries.add(new BarEntry(12f, 3));
+        entries.add(new BarEntry(15f, 4));
+        entries.add(new BarEntry(11f, 5));
+        //}
+
+        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("2016");
+        labels.add("2015");
+        labels.add("2014");
+        labels.add("2013");
+        labels.add("2012");
+        labels.add("2011");
+
+        BarData data = new BarData(labels, bardataset);
+        barChart.setData(data); // set the data and list of labels into chart
+        barChart.setDescription("Graphics Cards Price");  // set the description
+        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        barChart.animateY(5000);
+    }
+
+    public void graphicCardRam(){
+        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+
+        //fill the barchart information
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        //for (int i = 0; i < entries<BarEntry>.length; i++){
+        entries.add(new BarEntry(8f, 0));
+        entries.add(new BarEntry(2f, 1));
+        entries.add(new BarEntry(5f, 2));
+        entries.add(new BarEntry(12f, 3));
+        entries.add(new BarEntry(15f, 4));
+        entries.add(new BarEntry(11f, 5));
+        //}
+
+        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("2016");
+        labels.add("2015");
+        labels.add("2014");
+        labels.add("2013");
+        labels.add("2012");
+        labels.add("2011");
+
+        BarData data = new BarData(labels, bardataset);
+        barChart.setData(data); // set the data and list of labels into chart
+        barChart.setDescription("Graphics Cards RAM");  // set the description
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(5000);
     }
@@ -314,17 +387,13 @@ public class MainActivity extends AppCompatActivity {
                 filterCatalog();
                 mAdaptor.notifyDataSetChanged();
 
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-
                 // end Add View
                 View view = findViewById(R.id.cardEditor);
                 ((ViewGroup) view.getParent()).removeView(view);
                 hideKeyboard(MainActivity.this);
 
-                // Hide Main View until the end of adding a card.
-                mainView.setVisibility(View.GONE);
-
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -334,14 +403,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-
                 // end Add View
                 View view = findViewById(R.id.cardEditor);
                 ((ViewGroup) view.getParent()).removeView(view);
                 hideKeyboard(MainActivity.this);
 
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -360,7 +428,71 @@ public class MainActivity extends AppCompatActivity {
         if (!temp.isEmpty()) newCard.price = Float.parseFloat(temp);
 
         temp = ((EditText) findViewById(R.id.newRam)).getText().toString();
-        if (!temp.isEmpty()) newCard.ram = Float.parseFloat(temp);
+        if (!temp.isEmpty()) newCard.ram_size = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newRamType)).getText().toString();
+        if (!temp.isEmpty()) newCard.ram_type = temp;
+
+        temp = ((EditText) findViewById(R.id.newPCI)).getText().toString();
+        if (!temp.isEmpty()) newCard.PCI = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newFans)).getText().toString();
+        if (!temp.isEmpty()) newCard.fans = Integer.parseInt(temp);
+
+        temp = ((EditText) findViewById(R.id.newHDMI)).getText().toString();
+        if (!temp.isEmpty()) newCard.hdmi = Integer.parseInt(temp);
+
+        temp = ((EditText) findViewById(R.id.newDisplays)).getText().toString();
+        if (!temp.isEmpty()) newCard.displayPorts = Integer.parseInt(temp);
+
+        temp = ((EditText) findViewById(R.id.newPCI_Lane)).getText().toString();
+        if (!temp.isEmpty()) newCard.PCI_Lane = Integer.parseInt(temp);
+
+        // Heaven Score
+        temp = ((EditText) findViewById(R.id.newHeavenScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newHeavenAvgFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenAvgFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newHeavenMaxFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenMaxFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newHeavenMinFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenMinFps = Float.parseFloat(temp);
+
+        // Valley Score
+        temp = ((EditText) findViewById(R.id.newValleyScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newValleyAvgFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyAvgFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newValleyMaxFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyMaxFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newValleyMinFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyMinFps = Float.parseFloat(temp);
+
+        // Superposition Score
+        temp = ((EditText) findViewById(R.id.newSuperpositionScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newSuperpositionAvgFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionAvgFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newSuperpositionMaxFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionMaxFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newSuperpositionMinFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionMinFps = Float.parseFloat(temp);
+
+        // Other Scores
+        temp = ((EditText) findViewById(R.id.newSkydiverScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.skydiverScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newNightRaidScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.nightRaidScore = Double.parseDouble(temp);
     }
 
     public void editCard(GraphicCard card) {
@@ -368,9 +500,46 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         inflater.inflate(R.layout.card_editor, mainLayout);
+        View editview = findViewById(R.id.cardEditor);
+
+        final WeakReference<GraphicCard> reference = new WeakReference<GraphicCard>(card);
+
+        fillEditor(editview, card);
+        ((Button) findViewById(R.id.button)).setText("Save Changes");
 
         // Hide Main View until the end of editing a card.
         mainView.setVisibility(View.GONE);
+
+        Button editButton = findViewById(R.id.button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // save Changes
+                fillCard(reference.get());
+
+                // Add card  to catalog and re-sort it
+                catalog.sort(new Comparator<GraphicCard>() {
+                    @Override
+                    public int compare(GraphicCard o1, GraphicCard o2) {
+                        return o1.name.compareTo(o2.name);
+                    }
+                });
+
+                // Update Filtered data
+                filteredLog.clear();
+                filterCatalog();
+                mAdaptor.notifyDataSetChanged();
+
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+            }
+        });
 
         // Cancel adding a graphic card and close the view
         Button cancelButton = findViewById(R.id.cancelButton);
@@ -388,6 +557,42 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void fillEditor(View view, GraphicCard card) {
+
+        ((EditText) findViewById(R.id.newCardName)).setText(card.name);
+        ((EditText) findViewById(R.id.newManufacturor)).setText(card.manufacturer);
+        ((EditText) findViewById(R.id.newPrice)).setText(Float.toString(card.price));
+        ((EditText) findViewById(R.id.newRam)).setText(Float.toString(card.ram_size));
+        ((EditText) findViewById(R.id.newRamType)).setText(card.ram_type);
+        ((EditText) findViewById(R.id.newPCI)).setText(Float.toString(card.PCI));
+        ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newHDMI)).setText(Integer.toString(card.hdmi));
+        ((EditText) findViewById(R.id.newDisplays)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newPCI_Lane)).setText(Integer.toString(card.PCI_Lane));
+
+        // Heaven Score
+        ((EditText) findViewById(R.id.newHeavenScore)).setText(Double.toString(card.heavenScore));
+        ((EditText) findViewById(R.id.newHeavenAvgFPS)).setText(Float.toString(card.heavenAvgFps));
+        ((EditText) findViewById(R.id.newHeavenMaxFPS)).setText(Float.toString(card.heavenMaxFps));
+        ((EditText) findViewById(R.id.newHeavenMinFPS)).setText(Float.toString(card.heavenMinFps));
+
+        // Valley Score
+        ((EditText) findViewById(R.id.newValleyScore)).setText(Double.toString(card.valleyScore));
+        ((EditText) findViewById(R.id.newValleyAvgFPS)).setText(Float.toString(card.valleyAvgFps));
+        ((EditText) findViewById(R.id.newValleyMaxFPS)).setText(Float.toString(card.valleyMaxFps));
+        ((EditText) findViewById(R.id.newValleyMinFPS)).setText(Float.toString(card.valleyMinFps));
+
+        // Superposition Score
+        ((EditText) findViewById(R.id.newSuperpositionScore)).setText(Double.toString(card.superpositionScore));
+        ((EditText) findViewById(R.id.newSuperpositionAvgFPS)).setText(Float.toString(card.superpositionAvgFps));
+        ((EditText) findViewById(R.id.newSuperpositionMaxFPS)).setText(Float.toString(card.superpositionMaxFps));
+        ((EditText) findViewById(R.id.newSuperpositionMinFPS)).setText(Float.toString(card.superpositionMinFps));
+
+        // Other Scores
+        ((EditText) findViewById(R.id.newSkydiverScore)).setText(Double.toString(card.skydiverScore));
+        ((EditText) findViewById(R.id.newNightRaidScore)).setText(Double.toString(card.nightRaidScore));
     }
 
     public static void hideKeyboard(Activity activity) {
