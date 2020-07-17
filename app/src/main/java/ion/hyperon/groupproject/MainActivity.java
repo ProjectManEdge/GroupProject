@@ -385,6 +385,45 @@ public class MainActivity extends AppCompatActivity {
 
         temp = ((EditText) findViewById(R.id.newHeavenAvgFPS)).getText().toString();
         if (!temp.isEmpty()) newCard.heavenAvgFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newHeavenMaxFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenMaxFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newHeavenMinFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.heavenMinFps = Float.parseFloat(temp);
+
+        // Valley Score
+        temp = ((EditText) findViewById(R.id.newValleyScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newValleyAvgFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyAvgFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newValleyMaxFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyMaxFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newValleyMinFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.valleyMinFps = Float.parseFloat(temp);
+
+        // Superposition Score
+        temp = ((EditText) findViewById(R.id.newSuperpositionScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newSuperpositionAvgFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionAvgFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newSuperpositionMaxFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionMaxFps = Float.parseFloat(temp);
+
+        temp = ((EditText) findViewById(R.id.newSuperpositionMinFPS)).getText().toString();
+        if (!temp.isEmpty()) newCard.superpositionMinFps = Float.parseFloat(temp);
+
+        // Other Scores
+        temp = ((EditText) findViewById(R.id.newSkydiverScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.skydiverScore = Double.parseDouble(temp);
+
+        temp = ((EditText) findViewById(R.id.newNightRaidScore)).getText().toString();
+        if (!temp.isEmpty()) newCard.nightRaidScore = Double.parseDouble(temp);
     }
 
     public void editCard(GraphicCard card) {
@@ -461,12 +500,30 @@ public class MainActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.newPCI)).setText(Float.toString(card.PCI));
         ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
         ((EditText) findViewById(R.id.newHDMI)).setText(Integer.toString(card.hdmi));
-        ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newDisplays)).setText(Integer.toString(card.fans));
         ((EditText) findViewById(R.id.newPCI_Lane)).setText(Integer.toString(card.PCI_Lane));
 
         // Heaven Score
         ((EditText) findViewById(R.id.newHeavenScore)).setText(Double.toString(card.heavenScore));
         ((EditText) findViewById(R.id.newHeavenAvgFPS)).setText(Float.toString(card.heavenAvgFps));
+        ((EditText) findViewById(R.id.newHeavenMaxFPS)).setText(Float.toString(card.heavenMaxFps));
+        ((EditText) findViewById(R.id.newHeavenMinFPS)).setText(Float.toString(card.heavenMinFps));
+
+        // Valley Score
+        ((EditText) findViewById(R.id.newValleyScore)).setText(Double.toString(card.valleyScore));
+        ((EditText) findViewById(R.id.newValleyAvgFPS)).setText(Float.toString(card.valleyAvgFps));
+        ((EditText) findViewById(R.id.newValleyMaxFPS)).setText(Float.toString(card.valleyMaxFps));
+        ((EditText) findViewById(R.id.newValleyMinFPS)).setText(Float.toString(card.valleyMinFps));
+
+        // Superposition Score
+        ((EditText) findViewById(R.id.newSuperpositionScore)).setText(Double.toString(card.superpositionScore));
+        ((EditText) findViewById(R.id.newSuperpositionAvgFPS)).setText(Float.toString(card.superpositionAvgFps));
+        ((EditText) findViewById(R.id.newSuperpositionMaxFPS)).setText(Float.toString(card.superpositionMaxFps));
+        ((EditText) findViewById(R.id.newSuperpositionMinFPS)).setText(Float.toString(card.superpositionMinFps));
+
+        // Other Scores
+        ((EditText) findViewById(R.id.newSkydiverScore)).setText(Double.toString(card.skydiverScore));
+        ((EditText) findViewById(R.id.newNightRaidScore)).setText(Double.toString(card.nightRaidScore));
     }
 
     public static void hideKeyboard(Activity activity) {
