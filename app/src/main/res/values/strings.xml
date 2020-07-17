@@ -13,4 +13,12 @@
     <string name="avgFPS">Average FPS</string>
     <string name="maxFPS">Max FPS</string>
     <string name="minFPS">Min FPS</string>
+
+    <string-array name="Sort_array">
+        <item>Name</item>
+        <item>Price</item>
+        <item>Manufacturer</item>
+        <item>Ram</item>
+    </string-array>
+
 </resources>
