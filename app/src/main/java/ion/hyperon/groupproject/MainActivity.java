@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManage;
 
     ArrayList<GraphicCard> catalog;
-    ArrayList<GraphicCard> filteredLog;
+    ArrayList<WeakReference<GraphicCard>> filteredLog;
     HashMap<String, Object> filters;
 
     @Override
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Successfully filtered, add card to list and sort if needed
             if (withinFilter)
-                filteredLog.add(it.next());
+                filteredLog.add(new WeakReference<GraphicCard>(it.next()));
         }
     }
 
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         mAdaptor.setOnItemClickListener(new GraphicCardAdaptor.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                editCard(filteredLog.get(position));
+                editCard((filteredLog.get(position)).get());
             }
         });
     }
@@ -414,6 +414,109 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void editCard(GraphicCard card) {
+        // create editView
+        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        inflater.inflate(R.layout.card_editor, mainLayout);
+        View editview = findViewById(R.id.cardEditor);
+
+        final WeakReference<GraphicCard> reference = new WeakReference<GraphicCard>(card);
+
+        fillEditor(editview, card);
+        ((Button) findViewById(R.id.button)).setText("Save Changes");
+
+        // Hide Main View until the end of editing a card.
+        mainView.setVisibility(View.GONE);
+
+        Button editButton = findViewById(R.id.button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // save Changes
+                fillCard(reference.get());
+
+                // Add card  to catalog and re-sort it
+                catalog.sort(new Comparator<GraphicCard>() {
+                    @Override
+                    public int compare(GraphicCard o1, GraphicCard o2) {
+                        return o1.name.compareTo(o2.name);
+                    }
+                });
+
+                // Update Filtered data
+                mAdaptor.notifyDataSetChanged();
+
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Cancel adding a graphic card and close the view
+        Button cancelButton = findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+
+                // end Add View
+                View view = findViewById(R.id.cardEditor);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+            }
+        });
+    }
+
+    public void removeCard(View view) {
+        mAdaptor.deleteMode = !mAdaptor.deleteMode;
+        mAdaptor.notifyDataSetChanged();
+    }
+
+    private void fillEditor(View view, GraphicCard card) {
+
+        ((EditText) findViewById(R.id.newCardName)).setText(card.name);
+        ((EditText) findViewById(R.id.newManufacturor)).setText(card.manufacturer);
+        ((EditText) findViewById(R.id.newPrice)).setText(Float.toString(card.price));
+        ((EditText) findViewById(R.id.newRam)).setText(Float.toString(card.ram_size));
+        ((EditText) findViewById(R.id.newRamType)).setText(card.ram_type);
+        ((EditText) findViewById(R.id.newPCI)).setText(Float.toString(card.PCI));
+        ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newHDMI)).setText(Integer.toString(card.hdmi));
+        ((EditText) findViewById(R.id.newDisplays)).setText(Integer.toString(card.fans));
+        ((EditText) findViewById(R.id.newPCI_Lane)).setText(Integer.toString(card.PCI_Lane));
+
+        // Heaven Score
+        ((EditText) findViewById(R.id.newHeavenScore)).setText(Double.toString(card.heavenScore));
+        ((EditText) findViewById(R.id.newHeavenAvgFPS)).setText(Float.toString(card.heavenAvgFps));
+        ((EditText) findViewById(R.id.newHeavenMaxFPS)).setText(Float.toString(card.heavenMaxFps));
+        ((EditText) findViewById(R.id.newHeavenMinFPS)).setText(Float.toString(card.heavenMinFps));
+
+        // Valley Score
+        ((EditText) findViewById(R.id.newValleyScore)).setText(Double.toString(card.valleyScore));
+        ((EditText) findViewById(R.id.newValleyAvgFPS)).setText(Float.toString(card.valleyAvgFps));
+        ((EditText) findViewById(R.id.newValleyMaxFPS)).setText(Float.toString(card.valleyMaxFps));
+        ((EditText) findViewById(R.id.newValleyMinFPS)).setText(Float.toString(card.valleyMinFps));
+
+        // Superposition Score
+        ((EditText) findViewById(R.id.newSuperpositionScore)).setText(Double.toString(card.superpositionScore));
+        ((EditText) findViewById(R.id.newSuperpositionAvgFPS)).setText(Float.toString(card.superpositionAvgFps));
+        ((EditText) findViewById(R.id.newSuperpositionMaxFPS)).setText(Float.toString(card.superpositionMaxFps));
+        ((EditText) findViewById(R.id.newSuperpositionMinFPS)).setText(Float.toString(card.superpositionMinFps));
+
+        // Other Scores
+        ((EditText) findViewById(R.id.newSkydiverScore)).setText(Double.toString(card.skydiverScore));
+        ((EditText) findViewById(R.id.newNightRaidScore)).setText(Double.toString(card.nightRaidScore));
+    }
+
     private void fillCard(GraphicCard newCard) {
 
         String temp;
@@ -493,106 +596,6 @@ public class MainActivity extends AppCompatActivity {
 
         temp = ((EditText) findViewById(R.id.newNightRaidScore)).getText().toString();
         if (!temp.isEmpty()) newCard.nightRaidScore = Double.parseDouble(temp);
-    }
-
-    public void editCard(GraphicCard card) {
-        // create editView
-        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-        inflater.inflate(R.layout.card_editor, mainLayout);
-        View editview = findViewById(R.id.cardEditor);
-
-        final WeakReference<GraphicCard> reference = new WeakReference<GraphicCard>(card);
-
-        fillEditor(editview, card);
-        ((Button) findViewById(R.id.button)).setText("Save Changes");
-
-        // Hide Main View until the end of editing a card.
-        mainView.setVisibility(View.GONE);
-
-        Button editButton = findViewById(R.id.button);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // save Changes
-                fillCard(reference.get());
-
-                // Add card  to catalog and re-sort it
-                catalog.sort(new Comparator<GraphicCard>() {
-                    @Override
-                    public int compare(GraphicCard o1, GraphicCard o2) {
-                        return o1.name.compareTo(o2.name);
-                    }
-                });
-
-                // Update Filtered data
-                filteredLog.clear();
-                filterCatalog();
-                mAdaptor.notifyDataSetChanged();
-
-                // end Add View
-                View view = findViewById(R.id.cardEditor);
-                ((ViewGroup) view.getParent()).removeView(view);
-                hideKeyboard(MainActivity.this);
-
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-            }
-        });
-
-        // Cancel adding a graphic card and close the view
-        Button cancelButton = findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // return to Main View
-                mainView.setVisibility(View.VISIBLE);
-
-                // end Add View
-                View view = findViewById(R.id.cardEditor);
-                ((ViewGroup) view.getParent()).removeView(view);
-                hideKeyboard(MainActivity.this);
-
-            }
-        });
-    }
-
-    private void fillEditor(View view, GraphicCard card) {
-
-        ((EditText) findViewById(R.id.newCardName)).setText(card.name);
-        ((EditText) findViewById(R.id.newManufacturor)).setText(card.manufacturer);
-        ((EditText) findViewById(R.id.newPrice)).setText(Float.toString(card.price));
-        ((EditText) findViewById(R.id.newRam)).setText(Float.toString(card.ram_size));
-        ((EditText) findViewById(R.id.newRamType)).setText(card.ram_type);
-        ((EditText) findViewById(R.id.newPCI)).setText(Float.toString(card.PCI));
-        ((EditText) findViewById(R.id.newFans)).setText(Integer.toString(card.fans));
-        ((EditText) findViewById(R.id.newHDMI)).setText(Integer.toString(card.hdmi));
-        ((EditText) findViewById(R.id.newDisplays)).setText(Integer.toString(card.fans));
-        ((EditText) findViewById(R.id.newPCI_Lane)).setText(Integer.toString(card.PCI_Lane));
-
-        // Heaven Score
-        ((EditText) findViewById(R.id.newHeavenScore)).setText(Double.toString(card.heavenScore));
-        ((EditText) findViewById(R.id.newHeavenAvgFPS)).setText(Float.toString(card.heavenAvgFps));
-        ((EditText) findViewById(R.id.newHeavenMaxFPS)).setText(Float.toString(card.heavenMaxFps));
-        ((EditText) findViewById(R.id.newHeavenMinFPS)).setText(Float.toString(card.heavenMinFps));
-
-        // Valley Score
-        ((EditText) findViewById(R.id.newValleyScore)).setText(Double.toString(card.valleyScore));
-        ((EditText) findViewById(R.id.newValleyAvgFPS)).setText(Float.toString(card.valleyAvgFps));
-        ((EditText) findViewById(R.id.newValleyMaxFPS)).setText(Float.toString(card.valleyMaxFps));
-        ((EditText) findViewById(R.id.newValleyMinFPS)).setText(Float.toString(card.valleyMinFps));
-
-        // Superposition Score
-        ((EditText) findViewById(R.id.newSuperpositionScore)).setText(Double.toString(card.superpositionScore));
-        ((EditText) findViewById(R.id.newSuperpositionAvgFPS)).setText(Float.toString(card.superpositionAvgFps));
-        ((EditText) findViewById(R.id.newSuperpositionMaxFPS)).setText(Float.toString(card.superpositionMaxFps));
-        ((EditText) findViewById(R.id.newSuperpositionMinFPS)).setText(Float.toString(card.superpositionMinFps));
-
-        // Other Scores
-        ((EditText) findViewById(R.id.newSkydiverScore)).setText(Double.toString(card.skydiverScore));
-        ((EditText) findViewById(R.id.newNightRaidScore)).setText(Double.toString(card.nightRaidScore));
     }
 
     public static void hideKeyboard(Activity activity) {

@@ -11,15 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 // Adapter class for setting up the catalog list recyclerView.
 public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.GraphicCardViewHolder> {
 
-    private ArrayList<GraphicCard> catalog;
+    private ArrayList<WeakReference<GraphicCard>> catalog;
 
     // interface for clicking through parent activity
     private OnItemClickListener mListener;
+
+    public boolean deleteMode;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -35,7 +38,6 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
         public TextView textName;
         public TextView textManufacturer;
         public TextView price;
-        public CheckBox select;
         public ImageView deleteImage;
 
 
@@ -45,7 +47,7 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
             textName = itemView.findViewById(R.id.textView);
             textManufacturer = itemView.findViewById(R.id.textView2);
             price = itemView.findViewById(R.id.catalog_card_Price);
-            select = itemView.findViewById(R.id.checkBox);
+            deleteImage = itemView.findViewById(R.id.Card_Delete);
 
             // setup onClickListener for parent Activity
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +65,9 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
     }
 
     // default constructor
-    public GraphicCardAdaptor(ArrayList<GraphicCard> filteredList) {
+    public GraphicCardAdaptor(ArrayList<WeakReference<GraphicCard>> filteredList) {
         catalog = filteredList;
+        deleteMode = false;
     }
 
     // Grabs activity layout and sets it up with card view.
@@ -79,12 +82,18 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
     // Make a new "view item"
     @Override
     public void onBindViewHolder(@NonNull GraphicCardViewHolder holder, int position) {
-        GraphicCard currentCard = catalog.get(position);
+        GraphicCard currentCard = (catalog.get(position)).get();
 
         DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         holder.textName.setText(currentCard.name);
         holder.textManufacturer.setText(currentCard.manufacturer);
         holder.price.setText("$" + formatter.format(currentCard.price));
+
+        if (deleteMode) {
+            holder.deleteImage.setVisibility(View.VISIBLE);
+        } else {
+            holder.deleteImage.setVisibility(View.GONE);
+        }
 
     }
 

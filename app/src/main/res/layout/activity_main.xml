@@ -61,6 +61,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/ic_action_name_delete_1"
+                android:onClick="removeCard"
                 app:layout_constraintBaseline_toBaselineOf="@+id/buttonAdd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/buttonGraph" />
