@@ -16,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preferences;
 
     private View mainView;
+    private Spinner spinner;
 
     private RecyclerView mRecycleView;
     private GraphicCardAdaptor mAdaptor;
@@ -72,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         // setup materials
         setupData();
         setupCatalogDisplay();
+        setupSorter();
+
 
         // make references to major view objects... possibly move to display setup functions.
         mainView = findViewById(R.id.mainView);
@@ -95,6 +101,83 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // save data
+
+        if (!filters.isEmpty())
+            saveFilter();
+
+        if (!catalog.isEmpty())
+            saveCatalog();
+    }
+
+    public void setupData() {
+        // load in catalog, create new if it doesn't exist
+        boolean catalogExists = loadCatalog();
+        if (!catalogExists)
+            catalog = new ArrayList<>();
+
+        // load in filter information, create new if it doesn't exist
+        boolean filterUsed = loadFilter();
+        if (!filterUsed)
+            filters = new HashMap<>();
+
+        filteredLog = new ArrayList<>();
+        filterCatalog();
+    }
+
+    public void saveCatalog() {
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(catalog);
+        editor.putString("catalog", json);
+        editor.apply();     // This line is IMPORTANT !!!
+    }
+
+    public boolean loadCatalog() {
+
+        Gson gson = new Gson();
+        String json = preferences.getString("catalog", "");
+
+        // No filters were used, so there is nothing to load.
+        if (json.isEmpty())
+            return false;
+
+        java.lang.reflect.Type type = new TypeToken<ArrayList<GraphicCard>>() {
+        }.getType();
+        catalog = gson.fromJson(json, type);
+
+        return true;
+    }
+
+    public boolean loadFilter() {
+
+        Gson gson = new Gson();
+        String json = preferences.getString("filter", "");
+
+        // No filters were used, so there is nothing to load.
+        if (json.isEmpty())
+            return false;
+
+        java.lang.reflect.Type type = new TypeToken<HashMap<String, Object>>(){}.getType();
+        filters = gson.fromJson(json, type);
+
+        return true;
+    }
+
+    public void saveFilter() {
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(filters);
+        editor.putString("filter", json);
+        editor.apply();     // This line is IMPORTANT !!!
     }
 
     // uses filter functions to adjust the filtered log and the data displayed.
@@ -124,65 +207,81 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    private void setupSorter() {
 
-        // save data
+        spinner = findViewById(R.id.sortspinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.Sort_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
-        if (!filters.isEmpty())
-            saveFilter();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: {
+                        filteredLog.sort(new Comparator<WeakReference<GraphicCard>>() {
+                            @Override
+                            public int compare(WeakReference<GraphicCard> o1, WeakReference<GraphicCard> o2) {
+                                return o1.get().name.compareTo(o2.get().name);
+                            }
+                        });
+                        break;
+                    }
+                    case 1: {
+                        filteredLog.sort(new Comparator<WeakReference<GraphicCard>>() {
+                            @Override
+                            public int compare(WeakReference<GraphicCard> o1, WeakReference<GraphicCard> o2) {
+                                return o1.get().manufacturer.compareTo(o2.get().manufacturer);
+                            }
+                        });
+                        break;
+                    }
+                    case 2: {
+                        filteredLog.sort(new Comparator<WeakReference<GraphicCard>>() {
+                            @Override
+                            public int compare(WeakReference<GraphicCard> o1, WeakReference<GraphicCard> o2) {
+                                if (o1.get().price < o2.get().price)
+                                    return 1;
+                                else
+                                    return -1;
+                            }
+                        });
+                        break;
+                    }
+                    case 3: {
+                        filteredLog.sort(new Comparator<WeakReference<GraphicCard>>() {
+                            @Override
+                            public int compare(WeakReference<GraphicCard> o1, WeakReference<GraphicCard> o2) {
+                                if (o1.get().ram_size < o2.get().ram_size)
+                                    return -1;
+                                else
+                                    return 1;
+                            }
+                        });
+                        break;
+                    }
+                    default: {
+                        filteredLog.sort(new Comparator<WeakReference<GraphicCard>>() {
+                            @Override
+                            public int compare(WeakReference<GraphicCard> o1, WeakReference<GraphicCard> o2) {
+                                return o1.get().name.compareTo(o2.get().name);
+                            }
+                        });
+                    }
+                }
 
-        if (!catalog.isEmpty())
-            saveCatalog();
-    }
+                mAdaptor.notifyDataSetChanged();
+            }
 
-    public boolean loadFilter() {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-        Gson gson = new Gson();
-        String json = preferences.getString("filter","");
-
-        // No filters were used, so there is nothing to load.
-        if (json.isEmpty())
-            return false;
-
-        java.lang.reflect.Type type = new TypeToken<HashMap<String, Object>>(){}.getType();
-        filters = gson.fromJson(json, type);
-
-        return true;
-    }
-
-    public void saveFilter() {
-
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(filters);
-        editor.putString("filter",json);
-        editor.apply();     // This line is IMPORTANT !!!
-    }
-
-    public void saveCatalog() {
-
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(catalog);
-        editor.putString("catalog",json);
-        editor.apply();     // This line is IMPORTANT !!!
-    }
-
-    public boolean loadCatalog() {
-
-        Gson gson = new Gson();
-        String json = preferences.getString("catalog","");
-
-        // No filters were used, so there is nothing to load.
-        if (json.isEmpty())
-            return false;
-
-        java.lang.reflect.Type type = new TypeToken<ArrayList<GraphicCard>>(){}.getType();
-        catalog = gson.fromJson(json, type);
-
-        return true;
+            }
+        });
     }
 
     /*
@@ -191,21 +290,6 @@ public class MainActivity extends AppCompatActivity {
         catalog.clear();
     }
      */
-
-    public void setupData() {
-        // load in catalog, create new if it doesn't exist
-        boolean catalogExists = loadCatalog();
-        if (!catalogExists)
-            catalog = new ArrayList<>();
-
-        // load in filter information, create new if it doesn't exist
-        boolean filterUsed = loadFilter();
-        if (!filterUsed)
-            filters = new HashMap<>();
-
-        filteredLog = new ArrayList<>();
-        filterCatalog();
-    }
 
     // setup for the card list of graphic cards
     public void setupCatalogDisplay() {

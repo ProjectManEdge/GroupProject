@@ -16,8 +16,8 @@
 
     <string-array name="Sort_array">
         <item>Name</item>
-        <item>Price</item>
         <item>Manufacturer</item>
+        <item>Price</item>
         <item>Ram</item>
     </string-array>
 
