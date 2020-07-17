@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         mainView = findViewById(R.id.mainView);
     }
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -102,16 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+ */
 
     @Override
     protected void onStop() {
         super.onStop();
 
         // save data
-
-        if (!filters.isEmpty())
-            saveFilter();
-
         if (!catalog.isEmpty())
             saveCatalog();
     }
@@ -122,23 +119,18 @@ public class MainActivity extends AppCompatActivity {
         if (!catalogExists)
             catalog = new ArrayList<>();
 
+        /*
         // load in filter information, create new if it doesn't exist
         boolean filterUsed = loadFilter();
         if (!filterUsed)
             filters = new HashMap<>();
+        */
 
         filteredLog = new ArrayList<>();
         filterCatalog();
     }
 
-    public void saveCatalog() {
-
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(catalog);
-        editor.putString("catalog", json);
-        editor.apply();     // This line is IMPORTANT !!!
-    }
+    // Loading and Saving graphic cards
 
     public boolean loadCatalog() {
 
@@ -156,6 +148,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void saveCatalog() {
+
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(catalog);
+        editor.putString("catalog", json);
+        editor.apply();     // This line is IMPORTANT !!!
+    }
+
+    /* UN-IMPLEMENTED CODE
     public boolean loadFilter() {
 
         Gson gson = new Gson();
@@ -179,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("filter", json);
         editor.apply();     // This line is IMPORTANT !!!
     }
+     */
 
     // uses filter functions to adjust the filtered log and the data displayed.
     private void filterCatalog() {
@@ -186,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
         // loop through card catalog and and add cards to log that match filters.
         Iterator<GraphicCard> it = catalog.iterator();
         while (it.hasNext()) {
+
+            /* UN-IMPLEMENTED CODE
             boolean withinFilter = true;
 
             // HAS THIS filters
@@ -203,10 +208,14 @@ public class MainActivity extends AppCompatActivity {
 
             // Successfully filtered, add card to list and sort if needed
             if (withinFilter)
-                filteredLog.add(new WeakReference<GraphicCard>(it.next()));
+
+             */
+
+            filteredLog.add(new WeakReference<GraphicCard>(it.next()));
         }
     }
 
+    // setup the scolling selection for how the catalog is sorted
     private void setupSorter() {
 
         spinner = findViewById(R.id.sortspinner);
@@ -218,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        // Setup sort selection so it sorts the data upon selecting the method
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -274,7 +284,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                // update card view
                 mAdaptor.notifyDataSetChanged();
+
+                // hide selected option for beauty
+                ((TextView) view).setText(null);
             }
 
             @Override
