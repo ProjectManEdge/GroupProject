@@ -250,10 +250,10 @@ public class MainActivity extends AppCompatActivity {
         View graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
-        graphicCardPrice();
+        graphicCardPrice(graphView);
     }
 
-    public void graphicCardHeaven(){
+    public void graphicCardHeaven(View view){
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
         List<String> GraphicCard1 = new ArrayList<>();
@@ -261,12 +261,12 @@ public class MainActivity extends AppCompatActivity {
         //fill the barchart information
         ArrayList<BarEntry> entries = new ArrayList<>();
         //for (int i = 0; i < entries<BarEntry>.length; i++){
-        entries.add(new BarEntry(8f, 0));
-        entries.add(new BarEntry(2f, 1));
-        entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(12f, 3));
-        entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(11f, 5));
+        entries.add(new BarEntry(2f, 0));
+        entries.add(new BarEntry(4f, 1));
+        entries.add(new BarEntry(6f, 2));
+        entries.add(new BarEntry(8f, 3));
+        entries.add(new BarEntry(10f, 4));
+        entries.add(new BarEntry(12f, 5));
         //}
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.animateY(5000);
     }
 
-    public void graphicCardPrice(){
+    public void graphicCardPrice(View view){
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
         List<String> GraphicCard1 = new ArrayList<>();
@@ -319,18 +319,18 @@ public class MainActivity extends AppCompatActivity {
         barChart.animateY(5000);
     }
 
-    public void graphicCardRam(){
+    public void graphicCardRam(View view){
         BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
         //fill the barchart information
         ArrayList<BarEntry> entries = new ArrayList<>();
         //for (int i = 0; i < entries<BarEntry>.length; i++){
-        entries.add(new BarEntry(8f, 0));
-        entries.add(new BarEntry(2f, 1));
-        entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(12f, 3));
-        entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(11f, 5));
+        entries.add(new BarEntry(12f, 0));
+        entries.add(new BarEntry(4f, 1));
+        entries.add(new BarEntry(4f, 2));
+        entries.add(new BarEntry(7f, 3));
+        entries.add(new BarEntry(12f, 4));
+        entries.add(new BarEntry(10f, 5));
         //}
 
         BarDataSet bardataset = new BarDataSet(entries, "Cells");
