@@ -15,36 +15,38 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="581dp"
-            android:text="Button"
+            android:onClick="graphicCardPrice"
+            android:text="Price"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
+            app:layout_constraintEnd_toStartOf="@+id/buttonHeaven"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonHeaven"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="581dp"
-            android:text="Button"
+            android:text="Heaven"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/buttonRam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="581dp"
-            android:text="Button"
+            android:onClick="graphicCardRam"
+            android:text="RAM"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button3"
+            app:layout_constraintStart_toEndOf="@+id/buttonHeaven"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
