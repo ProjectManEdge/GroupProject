@@ -1,9 +1,11 @@
 package ion.hyperon.groupproject;
 
+import android.icu.text.DecimalFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,13 +34,17 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
 
         public TextView textName;
         public TextView textManufacturer;
+        public TextView price;
         public CheckBox select;
+        public ImageView deleteImage;
+
 
         public GraphicCardViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             textName = itemView.findViewById(R.id.textView);
             textManufacturer = itemView.findViewById(R.id.textView2);
+            price = itemView.findViewById(R.id.catalog_card_Price);
             select = itemView.findViewById(R.id.checkBox);
 
             // setup onClickListener for parent Activity
@@ -75,8 +81,10 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
     public void onBindViewHolder(@NonNull GraphicCardViewHolder holder, int position) {
         GraphicCard currentCard = catalog.get(position);
 
+        DecimalFormat formatter = new DecimalFormat("###,###,##0.00");
         holder.textName.setText(currentCard.name);
         holder.textManufacturer.setText(currentCard.manufacturer);
+        holder.price.setText("$" + formatter.format(currentCard.price));
 
     }
 
@@ -86,3 +94,4 @@ public class GraphicCardAdaptor extends RecyclerView.Adapter<GraphicCardAdaptor.
         return catalog.size();
     }
 }
+
