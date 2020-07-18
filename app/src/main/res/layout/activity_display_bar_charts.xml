@@ -18,36 +18,38 @@
             android:id="@+id/buttonPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="581dp"
-            android:onClick="graphicCardPrice"
+            android:layout_marginStart="8dp"
             android:text="Price"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/buttonHeaven"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/graphCancel"
+            app:layout_constraintStart_toEndOf="@+id/graphCancel" />
 
         <Button
             android:id="@+id/buttonHeaven"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="581dp"
+            android:layout_marginStart="8dp"
             android:text="Heaven"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/graphCancel"
+            app:layout_constraintStart_toEndOf="@+id/buttonPrice" />
 
         <Button
             android:id="@+id/buttonRam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="581dp"
-            android:onClick="graphicCardRam"
+            android:layout_marginStart="8dp"
             android:text="RAM"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/graphCancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/buttonHeaven"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/buttonHeaven" />
+
+        <Button
+            android:id="@+id/graphCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.github.mikephil.charting.charts.BarChart

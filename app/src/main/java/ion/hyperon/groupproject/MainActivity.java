@@ -346,111 +346,113 @@ public class MainActivity extends AppCompatActivity {
     public void displayBarChart(View view) {
         //setContentView(R.layout.activity_display_bar_charts);
         //create the layout for displaying the barcharts
-        final ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
+        ConstraintLayout mainLayout = findViewById(R.id.mainLayout);
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         inflater.inflate(R.layout.activity_display_bar_charts, mainLayout);
 
-        View graphView = findViewById(R.id.barChartLayout);
         mainView.setVisibility(View.GONE);
 
-        graphicCardPrice(graphView);
-    }
+        final ArrayList<BarEntry> prices = new ArrayList<>();
+        prices.add(new BarEntry(8f, 0));
+        prices.add(new BarEntry(20f, 1));
+        prices.add(new BarEntry(5f, 2));
+        prices.add(new BarEntry(12f, 3));
+        prices.add(new BarEntry(15f, 4));
+        prices.add(new BarEntry(11f, 5));
 
-    public void graphicCardHeaven(View view){
-        BarChart barChart = (BarChart) findViewById(R.id.barchart);
-
-        List<String> GraphicCard1 = new ArrayList<>();
-
-        //fill the barchart information
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        //for (int i = 0; i < entries<BarEntry>.length; i++){
+        final ArrayList<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(2f, 0));
         entries.add(new BarEntry(4f, 1));
         entries.add(new BarEntry(6f, 2));
         entries.add(new BarEntry(8f, 3));
         entries.add(new BarEntry(10f, 4));
         entries.add(new BarEntry(12f, 5));
-        //}
 
-        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+        final ArrayList<BarEntry> rams = new ArrayList<>();
+        rams.add(new BarEntry(8f, 0));
+        rams.add(new BarEntry(2f, 1));
+        rams.add(new BarEntry(5f, 2));
+        rams.add(new BarEntry(12f, 3));
+        rams.add(new BarEntry(15f, 4));
+        rams.add(new BarEntry(11f, 5));
 
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("2016");
-        labels.add("2015");
-        labels.add("2014");
-        labels.add("2013");
-        labels.add("2012");
-        labels.add("2011");
+        final ArrayList<String> labels = new ArrayList<String>();
+        labels.add("Card1");
+        labels.add("Card2");
+        labels.add("Card3");
+        labels.add("Card4");
+        labels.add("Card5");
+        labels.add("Card6");
 
-        BarData data = new BarData(labels, bardataset);
-        barChart.setData(data); // set the data and list of labels into chart
-        barChart.setDescription("Graphics Cards Heaven");  // set the description
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-        barChart.animateY(5000);
-    }
+        Button buttonRam = findViewById(R.id.buttonRam);
+        buttonRam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-    public void graphicCardPrice(View view){
-        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+                // generate bar graph for RAM
+                BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
-        List<String> GraphicCard1 = new ArrayList<>();
+                BarDataSet bardataset = new BarDataSet(rams, "Cells");
+                BarData data = new BarData(labels, bardataset);
+                barChart.setData(data); // set the data and list of labels into chart
+                barChart.setDescription("Graphics Cards RAM");  // set the description
+                bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                barChart.animateY(1000);
 
-        //fill the barchart information
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        //for (int i = 0; i < entries<BarEntry>.length; i++){
-        entries.add(new BarEntry(8f, 0));
-        entries.add(new BarEntry(2f, 1));
-        entries.add(new BarEntry(5f, 2));
-        entries.add(new BarEntry(12f, 3));
-        entries.add(new BarEntry(15f, 4));
-        entries.add(new BarEntry(11f, 5));
-        //}
+            }
+        });
 
-        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+        Button buttonPrice = findViewById(R.id.buttonPrice);
+        buttonPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("2016");
-        labels.add("2015");
-        labels.add("2014");
-        labels.add("2013");
-        labels.add("2012");
-        labels.add("2011");
+                // generate bar graph for Price
+                BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
-        BarData data = new BarData(labels, bardataset);
-        barChart.setData(data); // set the data and list of labels into chart
-        barChart.setDescription("Graphics Cards Price");  // set the description
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-        barChart.animateY(5000);
-    }
+                BarDataSet bardataset = new BarDataSet(prices, "Cells");
+                BarData data = new BarData(labels, bardataset);
+                barChart.setData(data); // set the data and list of labels into chart
+                barChart.setDescription("Graphics Cards Price");  // set the description
+                bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                barChart.animateY(1000);
 
-    public void graphicCardRam(View view){
-        BarChart barChart = (BarChart) findViewById(R.id.barchart);
+            }
+        });
 
-        //fill the barchart information
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        //for (int i = 0; i < entries<BarEntry>.length; i++){
-        entries.add(new BarEntry(12f, 0));
-        entries.add(new BarEntry(4f, 1));
-        entries.add(new BarEntry(4f, 2));
-        entries.add(new BarEntry(7f, 3));
-        entries.add(new BarEntry(12f, 4));
-        entries.add(new BarEntry(10f, 5));
-        //}
+        Button buttonHeaven = findViewById(R.id.buttonHeaven);
+        buttonHeaven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        BarDataSet bardataset = new BarDataSet(entries, "Cells");
+                // generate bar graph for Heaven
+                BarChart barChart = (BarChart) findViewById(R.id.barchart);
 
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("2016");
-        labels.add("2015");
-        labels.add("2014");
-        labels.add("2013");
-        labels.add("2012");
-        labels.add("2011");
+                BarDataSet bardataset = new BarDataSet(entries, "Cells");
+                BarData data = new BarData(labels, bardataset);
+                barChart.setData(data); // set the data and list of labels into chart
+                barChart.setDescription("Graphics Cards Rams");  // set the description
+                bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                barChart.animateY(1000);
 
-        BarData data = new BarData(labels, bardataset);
-        barChart.setData(data); // set the data and list of labels into chart
-        barChart.setDescription("Graphics Cards RAM");  // set the description
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-        barChart.animateY(5000);
+            }
+        });
+
+        Button cancelButton = findViewById(R.id.graphCancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // return to Main View
+                mainView.setVisibility(View.VISIBLE);
+
+                // end Add View
+                View view = findViewById(R.id.barChartLayout);
+                ((ViewGroup) view.getParent()).removeView(view);
+                hideKeyboard(MainActivity.this);
+
+            }
+        });
     }
 
     // opens up a view for adding a new graphic card to the catalog.
